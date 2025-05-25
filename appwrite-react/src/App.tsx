@@ -1,28 +1,29 @@
-import React, { useState } from "react";
-import { account, ID } from "./appwrite/auth";
-import './App.css'
+import React, { useState } from 'react';
+import { account, ID } from './appwrite/auth';
+import './App.css'; // Import CSS styles
 
-interface IUser {
+interface User {
   name: string;
 }
-const App = () => {
-  const [loggedInUser, setLoggedInUser] = useState<IUser | null>(null);
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [name, setName] = useState<string>("");
+
+const App: React.FC = () => {
+  const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [name, setName] = useState<string>('');
 
   async function login(email: string, password: string) {
     await account.createEmailPasswordSession(email, password);
-    setLoggedInUser(await account.get());
+    setLoggedInUser(await account.get() as User);
   }
 
   return (
-    <div>
-      <p>
-        {loggedInUser ? `Logged in as ${loggedInUser.name}` : "Not logged in"}
+    <div className="container">
+      <p className="status">
+        {loggedInUser ? `Logged in as ${loggedInUser.name}` : 'Not logged in'}
       </p>
 
-      <form>
+      <form className="auth-form">
         <input
           type="email"
           placeholder="Email"
@@ -42,12 +43,13 @@ const App = () => {
           onChange={(e) => setName(e.target.value)}
         />
 
-        <button type="button" onClick={() => login(email, password)}>
+        <button type="button" className="btn login-btn" onClick={() => login(email, password)}>
           Login
         </button>
 
         <button
           type="button"
+          className="btn register-btn"
           onClick={async () => {
             await account.create(ID.unique(), email, password, name);
             login(email, password);
@@ -58,8 +60,9 @@ const App = () => {
 
         <button
           type="button"
+          className="btn logout-btn"
           onClick={async () => {
-            await account.deleteSession("current");
+            await account.deleteSession('current');
             setLoggedInUser(null);
           }}
         >
