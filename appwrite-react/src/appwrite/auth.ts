@@ -33,6 +33,25 @@ export class AuthService {
             throw error;
         }
     }
+
+    async logout() {
+        try {
+            // delete all sessions
+            return await this.account.deleteSessions();
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getUser() {
+        try {
+            return await this.account.get();
+        } catch (error) {
+            throw error;
+        }
+        // if user is not logged in or session is expired or problem with appwrite
+        return null;
+    }
 }
 
 const authService = new AuthService();
