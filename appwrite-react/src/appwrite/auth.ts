@@ -1,43 +1,37 @@
-// import { Client, Account} from 'appwrite';
-// import conf from '../conf/config';
-
-// export const client = new Client();
-
-// client
-//     .setEndpoint(conf.appwriteUrl)
-//     .setProject(conf.appwriteProjectId); 
-
-// export const account = new Account(client);
-// export { ID } from 'appwrite';
-
 import { Client, Account, ID } from 'appwrite';
 import conf from '../conf/config';
 
 export class AuthService {
-    client: Client;
-    account: Account;
-    constructor() {
-        this.client = new Client();
+    client = new Client();
+    account;
+
+    constructor(){
         this.client
-            .setEndpoint(conf.appwriteUrl)
-            .setProject(conf.appwriteProjectId);
+        .setEndpoint(conf.appwriteUrl)
+        .setProject(conf.appwriteProjectId);
         this.account = new Account(this.client);
     }
 
-    async signup(email: string, password: string, name: string) {
-        await this.account.create(ID.unique(), email, password, name);
+    async createAccount({email, password, name}:{email: string, password: string, name: string}) {
+        try {
+            const userAccount = await this.account.create(ID.unique(), email, password, name);
+            if (userAccount) {
+                // redirect to login
+                return this.login({email, password})
+            } else {
+                return userAccount;
+            }
+        } catch (error) {
+            throw error;           
+        }
     }
 
-    async login(email: string, password: string) {
-        await this.account.createEmailPasswordSession(email, password);
-    }
-
-    async logout() {
-        await this.account.deleteSessions();
-    }
-
-    async get() {
-        return this.account.get();
+    async login({email, password}:{email: string, password: string}) {
+        try {
+            return await this.account.createEmailPasswordSession(email, password);
+        } catch (error) {
+            throw error;
+        }
     }
 }
 
