@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { account, ID } from './appwrite/auth';
-import './App.css'; // Import CSS styles
+import React, { useState } from "react";
+import authService from "./appwrite/auth";
+import "./App.css";
 
 interface User {
   name: string;
@@ -8,19 +8,19 @@ interface User {
 
 const App: React.FC = () => {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [name, setName] = useState<string>('');
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [name, setName] = useState<string>("");
 
   async function login(email: string, password: string) {
-    await account.createEmailPasswordSession(email, password);
-    setLoggedInUser(await account.get() as User);
+    await authService.login({ email, password });
+    setLoggedInUser(await authService.getUser());
   }
 
   return (
     <div className="container">
       <p className="status">
-        {loggedInUser ? `Logged in as ${loggedInUser.name}` : 'Not logged in'}
+        {loggedInUser ? `Logged in as ${loggedInUser.name}` : "Not logged in"}
       </p>
 
       <form className="auth-form">
@@ -43,7 +43,11 @@ const App: React.FC = () => {
           onChange={(e) => setName(e.target.value)}
         />
 
-        <button type="button" className="btn login-btn" onClick={() => login(email, password)}>
+        <button
+          type="button"
+          className="btn login-btn"
+          onClick={() => login(email, password)}
+        >
           Login
         </button>
 
@@ -51,7 +55,7 @@ const App: React.FC = () => {
           type="button"
           className="btn register-btn"
           onClick={async () => {
-            await account.create(ID.unique(), email, password, name);
+            await authService.createAccount({ email, password, name });
             login(email, password);
           }}
         >
@@ -62,7 +66,7 @@ const App: React.FC = () => {
           type="button"
           className="btn logout-btn"
           onClick={async () => {
-            await account.deleteSession('current');
+            await authService.logout();
             setLoggedInUser(null);
           }}
         >
