@@ -1,5 +1,5 @@
 import conf from "../conf/config";
-import { Client, Databases, Storage } from "appwrite";
+import { Client, Databases, Query, Storage } from "appwrite";
 
 export class Service{
     client = new Client();
@@ -50,6 +50,26 @@ export class Service{
             return true;
         } catch (error) {
             console.log(`Appwrite deletePost error: ${error}`);
+            return false;
+        }
+    }
+
+    async getPost(slug: string) {
+        try {
+            return await this.databases.getDocument(conf.appwriteDatabaseId, conf.appwriteCollectionId, slug);
+        } catch (error) {
+            console.log(`Appwrite getPost error: ${error}`);
+            // return null;
+            return false;
+        }
+    }
+
+    // query, for that indexes are needed, here get all posts with status active
+    async getPosts() {
+        try {
+            return await this.databases.listDocuments(conf.appwriteDatabaseId, conf.appwriteCollectionId, [Query.equal('status', 'active'), Query.limit(10)]);
+        } catch (error) {
+            console.log(`Appwrite getPosts error: ${error}`);
             return false;
         }
     }
