@@ -66,15 +66,26 @@ export class Service{
 
     // query, for that indexes are needed, here get all posts with status active
     //complex query
-        async getPosts() {
+    //     async getPosts() {
+    //     try {
+    //         return await this.databases.listDocuments(conf.appwriteDatabaseId, conf.appwriteCollectionId, [Query.equal('status', 'active'), Query.limit(10)]);
+    //     } catch (error) {
+    //         console.log(`Appwrite getPosts error: ${error}`);
+    //         return false;
+    //     }
+    // }
+
+    // simple query with default parameter
+    async getPosts(queries = [Query.equal('status', 'active')]) {
         try {
-            return await this.databases.listDocuments(conf.appwriteDatabaseId, conf.appwriteCollectionId, [Query.equal('status', 'active'), Query.limit(10)]);
+            // instead of passing single parameter, pass array with spreading the parameters
+            //(conf.appwriteDatabaseId, conf.appwriteCollectionId, queries)
+            return await this.databases.listDocuments(conf.appwriteDatabaseId, conf.appwriteCollectionId, [...queries]);
         } catch (error) {
             console.log(`Appwrite getPosts error: ${error}`);
             return false;
         }
     }
-
 
     // this would return id of uploaded file then we would save this while creating post to store in database
     async uploadFile(file: File) {
@@ -92,6 +103,16 @@ export class Service{
             return true;
         } catch (error) {
             console.log(`Appwrite deleteFile error: ${error}`);
+            return false;
+        }
+    }
+
+    // this would return url of uploaded file, did not use async because it does not return promise. [from docs]
+    getFilePreview(fileId: string) {
+        try {
+            return this.buckets.getFileView(conf.appwriteBucketId, fileId);
+        } catch (error) {
+            console.log(`Appwrite getFilePreview error: ${error}`);
             return false;
         }
     }
