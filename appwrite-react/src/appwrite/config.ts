@@ -1,5 +1,5 @@
 import conf from "../conf/config";
-import { Client, Databases, Query, Storage } from "appwrite";
+import { Client, Databases, ID, Query, Storage } from "appwrite";
 
 export class Service{
     client = new Client();
@@ -65,11 +65,33 @@ export class Service{
     }
 
     // query, for that indexes are needed, here get all posts with status active
-    async getPosts() {
+    //complex query
+        async getPosts() {
         try {
             return await this.databases.listDocuments(conf.appwriteDatabaseId, conf.appwriteCollectionId, [Query.equal('status', 'active'), Query.limit(10)]);
         } catch (error) {
             console.log(`Appwrite getPosts error: ${error}`);
+            return false;
+        }
+    }
+
+
+    // this would return id of uploaded file then we would save this while creating post to store in database
+    async uploadFile(file: File) {
+        try {
+            return await this.buckets.createFile(conf.appwriteBucketId, ID.unique(), file);
+        } catch (error) {
+            console.log(`Appwrite uploadFile error: ${error}`);
+            return false;
+        }
+    }
+
+    async deleteFile(fileId: string) {
+        try {
+            await this.buckets.deleteFile(conf.appwriteBucketId, fileId);
+            return true;
+        } catch (error) {
+            console.log(`Appwrite deleteFile error: ${error}`);
             return false;
         }
     }
