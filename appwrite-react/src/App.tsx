@@ -19,6 +19,7 @@ const App: React.FC = () => {
 
   return (
     <div className="container">
+      <h1 className="text-3xl font-bold mb-4 text-red-700 ">Welcome to Appwrite</h1>
       <p className="status">
         {loggedInUser ? `Logged in as ${loggedInUser.name}` : "Not logged in"}
       </p>
