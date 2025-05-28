@@ -1,81 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import authService from "./appwrite/auth";
-import "./App.css";
-
-interface User {
-  name: string;
-}
+import { Dispatch } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
+import { login } from "./store/slices/authSlice";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 const App: React.FC = () => {
-  const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [name, setName] = useState<string>("");
+  const dispatch: Dispatch = useDispatch();
+  const [loading, setLoding] = useState(true);
 
-  async function login(email: string, password: string) {
-    await authService.login({ email, password });
-    setLoggedInUser(await authService.getUser());
-  }
+  useEffect(() => {
+    authService
+      .getUser()
+      .then((user) => {
+        if (user) {
+          dispatch(login(user));
+        } else {
+          dispatch(login(null));
+        }
+      })
+      .finally(() => setLoding(false));
+  });
 
-  return (
-    <div className="container">
-      <h1 className="text-3xl font-bold mb-4 text-red-700 ">Welcome to Appwrite</h1>
-      <p className="status">
-        {loggedInUser ? `Logged in as ${loggedInUser.name}` : "Not logged in"}
-      </p>
-
-      <form className="auth-form">
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-
-        <button
-          type="button"
-          className="btn login-btn"
-          onClick={() => login(email, password)}
-        >
-          Login
-        </button>
-
-        <button
-          type="button"
-          className="btn register-btn"
-          onClick={async () => {
-            await authService.createAccount({ email, password, name });
-            login(email, password);
-          }}
-        >
-          Register
-        </button>
-
-        <button
-          type="button"
-          className="btn logout-btn"
-          onClick={async () => {
-            await authService.logout();
-            setLoggedInUser(null);
-          }}
-        >
-          Logout
-        </button>
-      </form>
+  return !loading ? (
+    <div>
+      <Header />
+      <main></main>
+      <Footer />
     </div>
-  );
+  ) : null;
 };
 
 export default App;
