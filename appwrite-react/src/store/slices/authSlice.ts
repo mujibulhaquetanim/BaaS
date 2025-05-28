@@ -1,4 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
 
 const initialState = {
     status: false,
@@ -9,7 +10,7 @@ const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        login: (state, action)=>{
+        login: (state, action: PayloadAction<any>)=>{
             state.status = true,
             // state.userData = action.payload //as userData and the user object are the same, we can just write userData.
             state.userData = action.payload.userData
