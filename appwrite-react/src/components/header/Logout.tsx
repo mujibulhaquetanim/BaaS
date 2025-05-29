@@ -1,11 +1,10 @@
-import React from "react";
 import authService from "../../appwrite/auth";
 import { useDispatch } from "react-redux";
 import { logout } from "../../store/slices/authSlice";
-import { useNavigate } from "react-router-dom";
+import { AppDispatch } from "../../store/store";
 
 export default function Logout() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleLogout = () => {
     authService
