@@ -1,10 +1,10 @@
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { RootState } from "../../store/store";
+import { useAppSelector } from "../../hooks/rtkHooks";
 import Logout from "./Logout";
 
 export default function Header() {
-  const authStatus = useSelector((state: RootState) => state.auth.status);
+  // const authStatus = useSelector((state: RootState) => state.auth.status);
+  const authStatus = useAppSelector((state) => state.auth.status);
   const navigate = useNavigate();
 
   const navItems = [

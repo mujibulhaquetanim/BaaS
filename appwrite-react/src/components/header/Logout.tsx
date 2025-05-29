@@ -1,10 +1,10 @@
 import authService from "../../appwrite/auth";
-import { useDispatch } from "react-redux";
 import { logout } from "../../store/slices/authSlice";
-import { AppDispatch } from "../../store/store";
+import { useAppDispatch } from "../../hooks/rtkHooks";
 
 export default function Logout() {
-  const dispatch = useDispatch<AppDispatch>();
+//   const dispatch = useDispatch<AppDispatch>();
+const dispatch = useAppDispatch();
 
   const handleLogout = () => {
     authService
