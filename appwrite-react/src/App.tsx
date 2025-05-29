@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import authService from "./appwrite/auth";
-import { Dispatch } from "@reduxjs/toolkit";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "./hooks/rtkHooks";
 import { login } from "./store/slices/authSlice";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
 
 const App: React.FC = () => {
-  const dispatch: Dispatch = useDispatch();
+  // const dispatch: Dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [loading, setLoding] = useState(true);
 
   useEffect(() => {
@@ -15,6 +15,7 @@ const App: React.FC = () => {
       .getUser()
       .then((user) => {
         if (user) {
+          console.log(user);
           dispatch(login(user));
         } else {
           dispatch(login(null));

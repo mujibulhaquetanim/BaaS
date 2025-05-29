@@ -4,6 +4,19 @@ import App from "./App";
 import "./index.css";
 import { store } from "./store/store";
 import { Provider } from "react-redux";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Login from "./components/Login";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+  },
+  // {
+  //   path: "/login",
+  //   element: <Login/>,
+  // }
+]);
 
 // instead of null-assertion operator, used proper null check
 const rootElement = document.getElementById("root");
@@ -11,7 +24,7 @@ if (rootElement) {
   ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
       <Provider store={store}>
-        <App />
+        <RouterProvider router={router} />
       </Provider>
     </React.StrictMode>
   );
