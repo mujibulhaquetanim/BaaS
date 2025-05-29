@@ -3,8 +3,8 @@ import authService from "./appwrite/auth";
 import { Dispatch } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import { login } from "./store/slices/authSlice";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import Header from "./components/header/Header";
+import Footer from "./components/footer/Footer";
 
 const App: React.FC = () => {
   const dispatch: Dispatch = useDispatch();
