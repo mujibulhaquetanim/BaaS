@@ -1,25 +1,33 @@
-import React, { useState } from 'react'
+import { useState, useEffect } from "react";
 import authService from "../appwrite/auth";
-import "./App.css";
 
 interface User {
   name: string;
 }
 
+export default function Login() {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [name, setName] = useState<string>("");
 
+  useEffect(() => {
+    async function fetchUser() {
+      const user = await authService.getUser();
+      setLoggedInUser(user);
+    }
+    fetchUser();
+  }, []);
+
   async function login(email: string, password: string) {
     await authService.login({ email, password });
-    setLoggedInUser(await authService.getUser());
+    const user = await authService.getUser();
+    setLoggedInUser(user);
   }
 
-export default function Login() {
   return (
-        <div className="container">
-      <h1 className="text-3xl font-bold mb-4 text-red-700 ">Welcome to Appwrite</h1>
+    <div className="container">
+      <h1 className="text-3xl font-bold mb-4 text-red-700">Welcome to Appwrite</h1>
       <p className="status">
         {loggedInUser ? `Logged in as ${loggedInUser.name}` : "Not logged in"}
       </p>
@@ -44,11 +52,7 @@ export default function Login() {
           onChange={(e) => setName(e.target.value)}
         />
 
-        <button
-          type="button"
-          className="btn login-btn"
-          onClick={() => login(email, password)}
-        >
+        <button type="button" className="btn login-btn" onClick={() => login(email, password)}>
           Login
         </button>
 
@@ -63,17 +67,13 @@ export default function Login() {
           Register
         </button>
 
-        <button
-          type="button"
-          className="btn logout-btn"
-          onClick={async () => {
-            await authService.logout();
-            setLoggedInUser(null);
-          }}
-        >
+        <button type="button" className="btn logout-btn" onClick={async () => {
+          await authService.logout();
+          setLoggedInUser(null);
+        }}>
           Logout
         </button>
       </form>
     </div>
-  )
+  );
 }
