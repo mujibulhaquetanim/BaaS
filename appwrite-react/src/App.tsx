@@ -4,6 +4,7 @@ import { useAppDispatch } from "./hooks/rtkHooks";
 import { login } from "./store/slices/authSlice";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
+import { Outlet } from "react-router-dom";
 
 const App: React.FC = () => {
   // const dispatch: Dispatch = useDispatch();
@@ -27,7 +28,9 @@ const App: React.FC = () => {
   return !loading ? (
     <div>
       <Header />
-      <main></main>
+      <main>
+        <Outlet/>
+      </main>
       <Footer />
     </div>
   ) : null;

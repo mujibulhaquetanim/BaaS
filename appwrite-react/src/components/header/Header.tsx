@@ -40,11 +40,11 @@ export default function Header() {
     <div>
       <header>
         <nav>
-          <ul>
+          <ul className="flex justify-center items-center gap-4 m-2">
             {navItems.map((item, _) =>
               item.active ? (
                 <li key={item.name}>
-                  <button onClick={() => navigate(item.slug)}>
+                  <button onClick={() => navigate(item.slug)} className="px-4 py-2 border rounded cursor-pointer">
                     {item.name}
                   </button>
                 </li>

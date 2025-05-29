@@ -11,11 +11,13 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    children:[
+      {
+        path: "/login",
+        element: <Login />
+      }
+    ]
   },
-  // {
-  //   path: "/login",
-  //   element: <Login/>,
-  // }
 ]);
 
 // instead of null-assertion operator, used proper null check
