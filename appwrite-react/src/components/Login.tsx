@@ -73,6 +73,55 @@ export default function Login() {
           </>
         )}
 
+        {authMode === "login" && (
+          <>
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button type="button" onClick={() => loginUser(email, password)}>
+              Login
+            </button>
+          </>
+        )}
+
+        {authMode === "signup" && (
+          <>
+            <input
+              type="text"
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button
+              type="button"
+              onClick={() => createAccount(email, password, name)}
+            >
+              Signup
+            </button>
+          </>
+        )}
+
         {loggedInUser && (
           <button
             type="button"
