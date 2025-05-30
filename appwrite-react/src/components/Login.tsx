@@ -15,16 +15,42 @@ export default function Login() {
 
   useEffect(() => {
     async function fetchUser() {
-      const user = await authService.getUser();
-      setLoggedInUser(user);
+      try {
+        const user = await authService.getUser();
+        setLoggedInUser(user);
+      } catch (error) {
+        console.log(error);
+      }
     }
     fetchUser();
   }, []);
 
-  async function login(email: string, password: string) {
-    await authService.login({ email, password });
-    const user = await authService.getUser();
-    setLoggedInUser(user);
+  async function loginUser(email: string, password: string) {
+    try {
+      await authService.login({ email, password });
+      const user = await authService.getUser();
+      setLoggedInUser(user);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function logoutUser() {
+    try {
+      await authService.logout();
+      setLoggedInUser(null);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function createAccount(email: string, password: string, name: string) {
+    try {
+      await authService.createAccount({ email, password, name });
+      await loginUser(email, password);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -73,10 +99,7 @@ export default function Login() {
             <button
               type="button"
               className="btn register-btn"
-              onClick={async () => {
-                await authService.createAccount({ email, password, name });
-                login(email, password);
-              }}
+              onClick={() => createAccount(email, password, name)}
             >
               Register
             </button>
@@ -113,7 +136,7 @@ export default function Login() {
             <button
               type="button"
               className="btn login-btn"
-              onClick={() => login(email, password)}
+              onClick={() => loginUser(email, password)}
             >
               Login
             </button>
@@ -124,10 +147,7 @@ export default function Login() {
           <button
             type="button"
             className="btn logout-btn"
-            onClick={async () => {
-              await authService.logout();
-              setLoggedInUser(null);
-            }}
+            onClick={() => logoutUser()}
           >
             Logout
           </button>
