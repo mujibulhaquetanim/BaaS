@@ -10,8 +10,7 @@ export default function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [name, setName] = useState<string>("");
-  const [register, setRegister] = useState<boolean>(false);
-  const [loginbtn, setLoginbtn] = useState<boolean>(false);
+  const [authMode, setAuthMode] = useState<"login" | "signup" | null>(null); //instead two state variables, we can use single state variable and check the value of it.
 
   useEffect(() => {
     async function fetchUser() {
@@ -63,84 +62,15 @@ export default function Login() {
       </p>
 
       <form className="auth-form">
-        {!register && (
-          <button
-            type="button"
-            className="border p-2 mb-2 rounded-2xl hover:bg-gray-200 hover:cursor-pointer"
-            onClick={() => {
-              setRegister(true);
-              setLoginbtn(false);
-            }}
-          >
-            Register
-          </button>
-        )}
-
-        {register && (
-          <div>
-            <input
-              type="text"
-              placeholder="Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <button
-              type="button"
-              className="btn register-btn"
-              onClick={() => createAccount(email, password, name)}
-            >
-              Register
-            </button>
-          </div>
-        )}
-
-        {!loginbtn && (
-          <button
-            type="button"
-            className="border p-2 rounded-2xl hover:bg-gray-200 hover:cursor-pointer"
-            onClick={() => {
-              setLoginbtn(true);
-              setRegister(false);
-            }}
-          >
-            Login
-          </button>
-        )}
-
-        {loginbtn && (
-          <div>
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <button
-              type="button"
-              className="btn login-btn"
-              onClick={() => loginUser(email, password)}
-            >
+        {!authMode && (
+          <>
+            <button type="button" onClick={() => setAuthMode("login")}>
               Login
             </button>
-          </div>
+            <button type="button" onClick={() => setAuthMode("signup")}>
+              Signup
+            </button>
+          </>
         )}
 
         {loggedInUser && (
